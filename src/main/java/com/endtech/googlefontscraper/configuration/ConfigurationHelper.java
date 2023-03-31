@@ -8,7 +8,7 @@ public class ConfigurationHelper {
     public static String getProperty(String key){
         Configurations configs = new Configurations();
         try {
-            Configuration config = configs.properties("application.properties");
+            Configuration config = configs.properties(Properties.PROPERTIES_FILE);
             return config.getString(key);
         } catch (ConfigurationException e) {
             return null;

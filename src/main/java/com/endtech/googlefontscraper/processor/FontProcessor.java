@@ -5,17 +5,10 @@ import com.endtech.googlefontscraper.configuration.Properties;
 import com.endtech.googlefontscraper.googlefonts.dtos.GoogleFontDTO;
 import com.endtech.googlefontscraper.googlefonts.dtos.GoogleFontFilesDTO;
 import com.endtech.googlefontscraper.googlefonts.dtos.GoogleFontsResponseDTO;
-import com.github.pireba.applescript.AppleScript;
-import com.github.pireba.applescript.AppleScriptException;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,9 +37,8 @@ public class FontProcessor {
         for (String url : urls){
             String local = createLocalName(url);
             downloadAndSaveFile(url, local);
-            installed.add(url);
+            installed.add(local);
             logger.info(String.format("%d/%d", ++count, urls.size()));
-            if (count == 50) return;
         }
         saveWroteFonts(installed);
     }
@@ -83,12 +75,12 @@ public class FontProcessor {
             sb.append(font);
             sb.append("\n");
         }
-        try (OutputStream outputStream = new FileOutputStream("fonts")) {
+        try (OutputStream outputStream = new FileOutputStream(Properties.FONTS_FILE)) {
             byte[] data = sb.toString().getBytes();
             outputStream.write(data);
-            System.out.println("Successfully wrote to the file.");
+            logger.info("Successfully saved downloaded fonts");
         } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file.");
+            logger.info("An error occurred while writing the downloaded fonts");
             e.printStackTrace();
         }
     }
